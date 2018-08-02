@@ -1,0 +1,33 @@
+version: "3.4"
+services:
+  0:
+    image: traefik
+    command:
+      - "storeconfig"
+      - "--api"
+      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:https Address::443 TLS"
+      - "--defaultentrypoints=http,https"
+      - "--acme"
+      - "--acme.storage=traefik/acme/account"
+      - "--acme.entryPoint=https"
+      - "--acme.httpChallenge.entryPoint=http"
+      - "--acme.onHostRule=true"
+      - "--acme.onDemand=false"
+      - "--acme.email=ssl@anvibo.com"
+      - "--docker"
+      - "--docker.swarmMode"
+      - "--docker.domain=anvibo.com"
+      - "--docker.watch"
+      - "--consul"
+      - "--consul.endpoint=consul:8500"
+      - "--consul.prefix=traefik"
+    networks: 
+      - consul-net
+    deploy:
+      restart_policy:
+        condition: on-failure
+    
+networks:
+  consul-net:
+    external: true
