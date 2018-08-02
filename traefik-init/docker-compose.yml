@@ -20,7 +20,7 @@ services:
       - "--docker.domain=anvibo.com"
       - "--docker.watch"
       - "--consul"
-      - "--consul.endpoint=consul:8500"
+      - "--consul.endpoint=consul_srv:8500"
       - "--consul.prefix=traefik"
     networks: 
       - consul-net
