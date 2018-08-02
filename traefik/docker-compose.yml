@@ -1,6 +1,6 @@
 version: "3.4"
 services:
-  traefik:
+  srv:
     image: traefik
     command:
       - "--consul"
