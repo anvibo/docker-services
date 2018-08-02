@@ -22,6 +22,7 @@ services:
       - "--consul"
       - "--consul.endpoint=consul_srv:8500"
       - "--consul.prefix=traefik"
+      - "--accesslog"
     networks: 
       - consul-net
     deploy:
