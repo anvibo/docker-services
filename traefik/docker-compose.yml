@@ -1,0 +1,39 @@
+version: "3.4"
+services:
+  traefik:
+    image: traefik
+    command:
+      - "--consul"
+      - "--consul.endpoint=consul:8500"
+      - "--consul.prefix=traefik"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gateway
+      - consul-net
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:traefik.anvibo.com
+        - traefik.port=8080
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  
+networks:
+  gateway:
+    external: true
+  consul-net:
+    external: true
