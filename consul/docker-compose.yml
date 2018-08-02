@@ -1,6 +1,6 @@
 version: "3.4"
 services:
-  consul:
+  srv:
     image: consul
     command: agent -server -bootstrap-expect=1
     volumes:
