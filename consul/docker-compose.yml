@@ -17,7 +17,7 @@ services:
       restart_policy:
         condition: on-failure
     networks:
-      - consul
+      - consul-net
 
 networks: 
   consul-net:
