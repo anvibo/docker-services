@@ -1,0 +1,25 @@
+version: "3.4"
+services:
+  srv:
+    image: prom/prometheus
+    deploy:
+      replicas: 1
+    configs:
+      - source: prometheus
+        target: /etc/prometheus/prometheus.yml
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:prometheus.anvibo.com
+        - traefik.port=9090
+      restart_policy:
+        condition: on-failure
+    networks: 
+      - gateway
+
+configs:
+  prometheus:
+    external: true
+
+networks:
+  gateway:
+    external: true
