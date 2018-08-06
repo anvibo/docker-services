@@ -1,0 +1,20 @@
+version: "3.4"
+services:
+  srv:
+    image: mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db1_root_pwd
+    secrets:
+        - db1_root_pwd
+    networks: 
+      - db-net
+    
+networks: 
+  db-net:
+    external: true
+
+volumes:
+  mysql-data:
+    driver: rexray/gcepd
