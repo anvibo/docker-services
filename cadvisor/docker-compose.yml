@@ -1,0 +1,14 @@
+version: "3.4"
+services:
+  srv:
+    image: google/cadvisor
+    hostname: '{{.Node.Hostname}}'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      restart_policy:
+        - on-failure 
+
