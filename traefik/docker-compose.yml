@@ -9,7 +9,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - gateway
+      - ingress
       - consul-net
     ports:
       - target: 80
@@ -33,7 +33,7 @@ services:
         condition: on-failure
   
 networks:
-  gateway:
+  ingress:
     external: true
   consul-net:
     external: true
