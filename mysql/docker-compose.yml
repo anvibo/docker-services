@@ -18,7 +18,7 @@ networks:
 
 volumes:
   db1-mysql-data:
-    driver: gce
+    external: true
 
 secrets:
     db1_root_pwd:
