@@ -18,3 +18,7 @@ networks:
 volumes:
   mysql-data:
     driver: rexray/gcepd
+
+secrets:
+    db1_root_pwd:
+      external: true
