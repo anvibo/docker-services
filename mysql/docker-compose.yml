@@ -3,7 +3,7 @@ services:
   srv:
     image: mysql-server
     volumes:
-      - mysql-data:/var/lib/mysql
+      - db1-mysql-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db1_root_pwd
 
@@ -17,8 +17,8 @@ networks:
     external: true
 
 volumes:
-  mysql-data:
-    driver: rexray/gcepd
+  db1-mysql-data:
+    external: true
 
 secrets:
     db1_root_pwd:
