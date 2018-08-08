@@ -3,7 +3,7 @@ services:
   srv:
     image: mysql
     volumes:
-      - db1-mysql-data:/var/lib/mysql
+      - /volumes/db1-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db1_root_pwd
 
@@ -14,10 +14,6 @@ services:
     
 networks: 
   db-net:
-    external: true
-
-volumes:
-  db1-mysql-data:
     external: true
 
 secrets:
