@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.7"
 services:
   srv:
     image: phpmyadmin/phpmyadmin
@@ -7,7 +7,7 @@ services:
     
     deploy:
       restart_policy:
-        - on-failure
+        - condition: on-failure
       labels:
         - traefik.frontend.rule=Host:pma.anvibo.com
         - traefik.port=80
