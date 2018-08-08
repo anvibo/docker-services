@@ -7,7 +7,7 @@ services:
     
     deploy:
       restart_policy:
-        - condition: on-failure
+        condition: on-failure
       labels:
         - traefik.frontend.rule=Host:pma.anvibo.com
         - traefik.port=80
