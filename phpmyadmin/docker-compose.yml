@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  srv:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    deploy:
+      restart_policy:
+        - on-failure
+      labels:
+        - traefik.frontend.rule=Host:pma.anvibo.com
+        - traefik.port=80
+    networks: 
+      - db-net
+      - proxy-net
+
+networks: 
+  db-net:
+    external: true
+  proxy-net:
+    external: true
