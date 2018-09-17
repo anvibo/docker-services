@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  srv:
+    image: anvibo/limesurvey
+    deploy:
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.frontend.rule=Host:arp-ls.anvibo.com
+        - traefik.port=80
+        - traefik.docker.network=proxy-net
+    networks: 
+      - db1-net
+      - proxy-net
+
+networks: 
+  db1-net:
+    external: true
+  proxy-net:
+    external: true

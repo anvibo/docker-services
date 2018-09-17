@@ -3,20 +3,23 @@ services:
   srv:
     image: mariadb
     volumes:
-      - /volumes/db1-data:/var/lib/mysql
+      - db1-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db1_root_pwd
     secrets:
         - db1_root_pwd
     networks: 
-      - db-net
+      - db1-net
     deploy:
       resources:
         limits:
           cpus: '0.5'
           memory: 300M
+volumes:
+  db1-data:
+    external: true
 networks: 
-  db-net:
+  db1-net:
     external: true
 
 secrets:

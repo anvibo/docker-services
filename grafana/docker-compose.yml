@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  srv:
+    image: grafana/grafana
+    deploy:
+      #restart_policy:
+      #  condition: on-failure
+      labels:
+        - traefik.frontend.rule=Host:grafana.anvibo.com
+        - traefik.port=3000
+        - traefik.docker.network=proxy-net
+    volumes:
+        - grafana-storage:/var/lib/grafana
+    networks: 
+      - proxy-net
+
+networks: 
+  proxy-net:
+    external: true
+
+volumes:
+  grafana-storage:
+    external: true

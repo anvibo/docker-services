@@ -3,14 +3,31 @@ services:
   srv:
     image: traefik
     command:
-      - "--consul"
-      - "--consul.endpoint=consul_srv:8500"
-      - "--consul.prefix=traefik"
+            - "traefik"
+            - "--api"
+            - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+            - "--entrypoints=Name:https Address::443 TLS"
+            - "--defaultentrypoints=http,https"
+            - "--docker"
+            - "--docker.swarmMode"
+            - "--docker.domain=anvibo.com"
+            - "--docker.watch"
+            - "--accesslog"
+            - "--acme"
+            - "--acme.storage=/etc/traefik/acme/acme.json"
+            - "--acme.entryPoint=https"
+            - "--acme.httpChallenge.entryPoint=http"
+            - "--acme.onHostRule=true"
+            - "--acme.onDemand=false"
+            - "--acme.email=ssl@anvibo.com"
+            - "--acme.acmelogging"
+        
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /home/ubuntu/docker-services/traefik/traefik.toml:/traefik.toml
+      - traefik-acme-data:/etc/traefik/acme/
     networks:
       - proxy-net
-      - consul-net
     ports:
       - target: 80
         published: 80
@@ -19,21 +36,22 @@ services:
         published: 443
         mode: host
     deploy:
-      labels:
-        - traefik.frontend.rule=Host:traefik.anvibo.com
-        - traefik.port=8080
-      mode: global
       placement:
         constraints:
           - node.role == manager
-      update_config:
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-  
+      #restart_policy:
+      #  condition: on-failure
+      labels:
+        - traefik.frontend.rule=Host:proxy.anvibo.com
+        - traefik.port=8080
+
+volumes:
+        traefik-acme-data:
+                external: true
+                     
 networks:
   proxy-net:
     external: true
   consul-net:
     external: true
+

@@ -4,22 +4,41 @@ services:
     image: prom/prometheus
     deploy:
       replicas: 1
-    configs:
-      - source: prometheus
-        target: /etc/prometheus/prometheus.yml
+    volumes:
+      - /home/ubuntu/docker-services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
     deploy:
       labels:
         - traefik.frontend.rule=Host:prometheus.anvibo.com
         - traefik.port=9090
+        - traefik.docker.network=proxy-net
       restart_policy:
         condition: on-failure
     networks: 
-      - gateway
-
-configs:
-  prometheus:
-    external: true
+      - proxy-net
+      - mon-net 
+  node_exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    networks:
+      - mon-net
+    deploy:
+      mode: global
 
 networks:
-  gateway:
+  proxy-net:
     external: true
+  mon-net:
+    external: true
+
+volumes:
+  prometheus-data:
+     external: true
